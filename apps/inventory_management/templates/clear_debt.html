@@ -1,0 +1,23 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+  <h2>Clear Debt</h2>
+
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="debtor_name"> Debtor's name</label>
+      <input type="text" class="form-control" id="debtor_name" name="debtor_name" value="{{ debt.debtor_name}}" readonly>
+    </div>
+    <div class="form-group">
+      <label for="amount">Amount</label>
+      <input type="number" class="form-control" id="amount" name="amount" value="{{ debt.amount }}" readonly>
+    </div>
+    <div class="form-group">
+      <label for="cleared_on">Cleared On</label>
+      <input type="date" class="form-control" id="cleared_on" name="cleared_on">
+    </div>
+    <button type="submit" class="btn btn-primary">Clear Debt</button>
+  </form>
+
+{% endblock %}

@@ -1,0 +1,165 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+
+ <!-- Responsive Table -->
+ <div class="card">
+  <h1 class="card-header"><span class="text-muted fw-light">Stock /</span>Stock Table</h1>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <form method="get" action="{% url 'drink_list' %}">
+          <div class="input-group">
+            <select name="category" class="form-control">
+              <option value="" {% if not category_filter %}selected{% endif %}>All Categories</option>
+              {% for category in categories %}
+                  <option value="{{ category.0 }}" {% if category_filter == category.0 %}selected{% endif %}>{{ category.1 }}</option>
+              {% endfor %}
+          </select>          
+            <button class="btn btn-primary" type="submit"><i class="fas fa-filter"></i> Filter</button>
+          </div>
+        </form>
+      </div>
+     
+      <div class="col-md-8 text-end mb-3">
+        {% if request.user.is_staff %}
+        <a class="btn btn-outline-primary" href="{% url 'drink_create' %}">
+          <i class="fas fa-plus-circle"></i> Add Drink
+        </a>
+        {% endif %}
+        
+    
+       <a class="btn btn-secondary export-pdf" href="{% url 'drink_list' %}?export_pdf=1{% if category_filter %}&category={{ category_filter }}{% endif %}">
+        <i class="fa fa-file-pdf-o"></i> Download PDF
+      </a>
+      <a class="btn btn-secondary export-csv" href="{% url 'drink_list' %}?export_csv=1{% if category_filter %}&category={{ category_filter }}{% endif %}">
+        <i class="fa fa-file-excel-o"></i> Download CSV
+      </a>
+      
+      
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-bordered mb-3">
+        <thead>
+          <tr>
+            <th>S/N</th>
+            <th>Drink Name</th>
+            <th>Quantity</th>
+            <th>Selling Price</th>
+            {% if request.user.is_staff %}
+            <th scope="col">Actions</th>
+            {% endif %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for drink in page_obj %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{ drink.name|capfirst  }}</td>
+              <td>{{ drink.total_stock }}</td>
+              <td>₦{{ drink.price }}</td>
+  
+              {% if request.user.is_staff %}
+              <td>
+                <div class="dropdown">
+                  <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                    <i class="bx bx-dots-vertical-rounded"></i>
+                  </button>
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item" href="{% url 'drink_detail' drink.pk %}"
+                      ><i class="bx bx-edit-alt me-1"></i> Detail</a
+                    >
+                  </div>
+                </div>
+              </td>
+            {% endif %}
+            
+            
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="10" class="text-center">No drinks found.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="pagination-section">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if category_filter %}&category={{ category_filter }}{% endif %}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link" aria-hidden="true">&laquo;</span>
+                </li>
+                {% endif %}
+                {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                <li class="page-item active">
+                    <span class="page-link">{{ num }}</span>
+                </li>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ num }}{% if category_filter %}&category={{ category_filter }}{% endif %}">{{ num }}</a>
+                </li>
+                {% endif %}
+                {% endfor %}
+  
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if category_filter %}&category={{ category_filter }}{% endif %}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link" aria-hidden="true">&raquo;</span>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+  </div>
+
+  </div>
+</div>
+<!--/ Responsive Table -->
+   
+
+{% endblock %}
+
+{% block scripts %}
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('.export-pdf').on('click', function (e) {
+        e.preventDefault();
+        var url = $(this).attr('href');
+        window.location.href = url + window.location.search;
+      });
+      $('.export-csv').on('click', function (e) {
+        e.preventDefault();
+        var url = $(this).attr('href');
+        window.location.href = url + window.location.search;
+      });
+    });
+  </script>
+{% endblock %}
+
+
+{% comment %} {% block scripts %}
+<script>
+    $(document).ready(function () {
+        $('.export').on('click', function (e) {
+            e.preventDefault();
+            var url = $(this).attr('href');
+            window.location.href = url + window.location.search;
+        });
+    });
+</script>
+{% endblock %} {% endcomment %}

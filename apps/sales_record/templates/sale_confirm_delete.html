@@ -1,0 +1,23 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="card mb-4">
+    <div class="container-xxl flex-grow-1 container-p-y">
+      <h1 class="card-header"><span class="text-muted fw-light">Sale /</span>Confirm Delete</h1>
+        <div class="card-body">
+    <p class="fs-6">Are you sure you want to delete this sale?</p>
+    <p><strong>Drink:</strong> {{ sale.drink }}</p>
+    <p><strong>Quantity:</strong> {{ sale.quantity }}</p>
+    <p><strong>Total Price:</strong> ₦{{ sale.total_price }}</p>
+
+    <form method="post">
+        {% csrf_token %}
+        {% comment %} <button type="submit" class="btn btn-danger">Delete</button> {% endcomment %}
+        <a href="{% url 'sale_list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+</div>
+</div>
+</div>
+{% endblock %}

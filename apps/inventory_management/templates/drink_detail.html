@@ -1,0 +1,44 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container my-4">
+  <div class="row">
+    <div class="col-md-4">
+      <img src="{{ drink.image.url }}" class="img-fluid" alt="{{ drink.name }}">
+    </div>
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-body">
+          <h2 class="card-title">{{ drink.name|capfirst  }}</h2>
+          <table class="table table-bordered table-hover mb-3">
+            <tbody>
+              <tr>
+                <th>Price</th>
+                <td>{{ drink.price }}</td>
+              </tr>
+              <tr>
+                <th>Category</th>
+                <td>{{ drink.category  }}</td>
+              </tr>
+              <tr>
+                <th>Total Stock</th>
+                <td>{{ drink.total_stock }}</td>
+              </tr>
+               <tr>
+                <th>Date Created</th>
+                <td>{{ drink.date_created}}</td>
+              </tr> 
+         
+            </tbody>
+          </table>
+          <div class="d-flex justify-content-between">
+            <a href="{% url 'drink_update' drink.id %}" class="btn btn-warning"><i class="bx bx-edit-alt me-1"></i> Edit</a>
+            <a href="{% url 'drink_delete' drink.id %}" class="btn btn-danger"><i class="bx bx-trash me-1"></i>  Delete</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

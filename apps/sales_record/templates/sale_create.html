@@ -1,0 +1,61 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+<div class="content-wrapper">
+  <div class="card mb-4">
+  <div class="container-xxl flex-grow-1 container-p-y">
+    <h1 class="card-header"><span class="text-muted fw-light">Sale /</span>Create Sale</h1>
+      <div class="card-body">
+  <div class="container">
+    {% if form.errors %}
+    <div class="alert alert-danger pb-4">
+      <strong> {{ form.non_field_errors }}</strong>
+    </div>
+  {% endif %}
+    <form method="post">
+      {% csrf_token %}
+      <div class="form-group">
+        {{ form.sale_date.label_tag }}
+        {{ form.sale_date }}
+      </div>
+      <div class="form-group">
+        {{ form.drink.label_tag }}
+        {{ form.drink }}
+      </div>
+      <div class="form-group">
+        {{ form.quantity.label_tag }}
+        {{ form.quantity }}
+      </div>
+      <div class="form-group">
+        {{ form.mode_of_payment.label_tag }}
+        {{ form.mode_of_payment }}
+      </div>
+      {% if form.mode_of_payment.value == 'DEBT' %}
+      <div class="form-group">
+        {{ form.debtor_name.label_tag }}
+        {{ form.debtor_name }}
+    
+        {% if form.instance.mode_of_payment == 'DEBT' and form.debtor_name.errors %}
+        <div class="invalid-feedback d-block">{{ form.debtor_name.errors }}</div>
+      {% endif %}      
+      </div>
+      {% elif form.mode_of_payment.value == 'COMPLIMENTARY' %}
+      <div class="form-group">
+        {{ form.customer_name.label_tag }}
+        {{ form.customer_name }}
+    
+        {% if form.instance.mode_of_payment == 'COMPLIMENTARY' and form.customer_name.errors %}
+        <div class="invalid-feedback d-block">{{ form.customer_name.errors }}</div>
+      {% endif %}      
+      </div>
+      {% endif %}
+      <button type="submit" class="btn btn-primary mt-4">Create Sale</button>
+    </form>
+    
+    
+  </div>
+</div>
+</div>
+</div>
+</div>
+{% endblock %}

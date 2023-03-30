@@ -1,0 +1,99 @@
+{% extends "layouts/basepdf.html" %}
+
+{% load static %}
+
+{% block content %}
+    <style>
+      /* Define styles for the PDF document */
+      body {
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 24px;
+        text-align: center;
+        margin-top: 30px;
+      }
+      table {
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        width: 100%;
+      }
+      th, td {
+        border: 1px solid black;
+        padding-top: 5px;
+
+        text-align: center;
+      }
+      th {
+        background-color: #ccc;
+      }
+      .total {
+        font-weight: bold;
+      }
+    </style>
+  
+    <h1>Sale Report: {{ date_from }} - {{ date_to }}</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>S/N</th>
+          <th>Sale Date</th>
+          <th>Drink Name</th>
+          <th>Quantity</th>
+          <th>₦ Selling Price</th>
+          <th>₦ Total Price</th>
+          <th>Mode of Payment</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for sale in sales %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ sale.sale_date }}</td>
+            <td>{{ sale.drink.name }}</td>
+            <td>{{ sale.quantity }}</td>
+            <td>{{ sale.price }}</td>
+            <td>{{ sale.total_price }}</td>
+            <td>{{ sale.mode_of_payment }}</td>
+          </tr>
+        {% endfor %}
+        <tr class="total">
+          <td colspan="5">Total Sales:</td>
+          <td>{{ total_sales }}</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td colspan="7"><strong>Total Sales by Mode of Payment</strong></td>
+        </tr>
+        <tr>
+          <td colspan="5">POS Sales:</td>
+          <td>{{ pos_sales }}</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td colspan="5">TRANSFER Sales:</td>
+          <td>{{ transfer_sales }}</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td colspan="5">CASH Sales:</td>
+          <td>{{ cash_sales }}</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td colspan="5">DEBT Sales:</td>'
+          <td>{{ debt_sales }}</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td colspan="5">COMPLIMENTARY Sales:</td>
+          <td>{{ complimentary_sales }}</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+    {% endblock %}
+

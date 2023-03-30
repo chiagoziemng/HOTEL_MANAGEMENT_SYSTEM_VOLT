@@ -1,0 +1,85 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-12">
+      <h1>Drink Table</h1>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Opening Stock</th>
+            <th>New Stock</th>
+            <th>Total Stock</th>
+            <th>Number Sold</th>
+            <th>Damage</th>
+            <th>Amount Sold</th>
+            <th>Closing Stock</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for drink in drinks %}
+            <tr>
+              <td>{{ drink.name }}</td>
+              <td>{{ drink.category }}</td>
+              <td>{{ drink.price }}</td>
+              <td>{{ drink.opening_stock }}</td>
+              <td>{{ drink.new_stock }}</td>
+              <td>{{ drink.total_stock }}</td>
+              <td>{{ drink.number_sold }}</td>
+              <td>{{ drink.damage }}</td>
+              <td>{{ drink.amount_sold }}</td>
+              <td>{{ drink.closing_stock }}</td>
+              <td>{{ drink.date }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <table class="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Image</th>
+            <th>Opening Stock</th>
+            <th>New Stock</th>
+            <th>Total Stock</th>
+            <th>Price</th>
+            <th>Number Sold</th>
+            <th>Damage</th>
+            <th>Amount Sold</th>
+            <th>Closing Stock</th>
+            <th>Date Created</th>
+            <th>Date Archived</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for drink in archived_drinks %}
+            <tr>
+              <td>{{ drink.name }}</td>
+              <td>{{ drink.get_category_display }}</td>
+              <td><img src="{{ drink.image.url }}" alt="{{ drink.name }}" class="img-thumbnail"></td>
+              <td>{{ drink.opening_stock }}</td>
+              <td>{{ drink.new_stock }}</td>
+              <td>{{ drink.total_stock }}</td>
+              <td>{{ drink.price }}</td>
+              <td>{{ drink.number_sold }}</td>
+              <td>{{ drink.damage }}</td>
+              <td>{{ drink.amount_sold }}</td>
+              <td>{{ drink.closing_stock }}</td>
+              <td>{{ drink.date_created }}</td>
+              <td>{{ drink.date_archived }}</td>
+            </tr>
+          {% empty %}
+            <tr>
+              <td colspan="13">No archived drinks available.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+  </div>
+{% endblock %}

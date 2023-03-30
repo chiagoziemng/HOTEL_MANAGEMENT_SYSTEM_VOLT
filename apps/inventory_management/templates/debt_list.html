@@ -1,0 +1,120 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+<div class="content-wrapper">
+  <div class="card mb-4">
+  <div class="container-xxl flex-grow-1 container-p-y">
+    <h1 class="card-header"><span class="text-muted fw-light">Sale /</span>Debt Account </h1>
+      <div class="card-body">
+  <form class="form-inline mb-3">
+    <div class="input-group">
+        <input type="date" class="form-control" placeholder="Search by Date" name="date" value="{{ date }}">
+        <div class="input-group-append">
+            <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
+        </div>
+    </div>
+</form>
+
+
+
+  <div class="btn-group mb-3" role="group">
+    <a href="{% url 'debt_list' %}" class="btn btn-{% if status == 'all' %}primary{% else %}outline-primary{% endif %}">All Debts</a>
+    <a href="{% url 'debt_list' status='cleared' %}" class="btn btn-{% if status == 'cleared' %}primary{% else %}outline-primary{% endif %}">Cleared Debts</a>
+    <a href="{% url 'debt_list' status='owing' %}" class="btn btn-{% if status == 'owing' %}primary{% else %}outline-primary{% endif %}">Owing Debts</a>
+  </div>
+
+    <table class="table table-hover table-bordered">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Date</th>
+          <th>{% if status == 'cleared' %}Debtor{% else %}Debtor Name{% endif %}</th>
+          <th>Amount</th>
+          {% if status != 'cleared' %}
+            <th>Action</th>
+          {% else %}
+            <th>Cleared On</th>
+          {% endif %}
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for debt in debts %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ debt.date }}</td>
+            <td>
+              {% if debt.status == 'Cleared' %}
+                <span class="text-muted">{{ debt.debtor_name|capfirst  }}</span>
+              {% else %}
+                {{ debt.debtor_name }}
+              {% endif %}
+            </td>
+            <td>₦ {{ debt.amount }}</td>
+            {% if status == 'cleared' %}
+              <td>{{ debt.cleared_on }}</td>
+            {% else %}
+              <td>
+                {% if debt.status != 'Cleared' %}
+                <a href="{% url 'clear_debt' pk=debt.pk %}" class="btn btn-sm btn-success">Clear Debt</a>
+                {% endif %}
+              </td> 
+            {% endif %}
+            <td>
+                {% if debt.status == 'Cleared' %}
+                  <button type="button" class="btn btn-sm btn-danger" disabled><i class="bx bx-trash me-1"></i> Delete</button>
+                  <small class="text-muted">Debt has already been cleared and cannot be deleted.</small>
+                {% else %}
+                <a href="{% url 'debt_delete' debt.pk %}" class="btn btn-sm btn-danger"><i class="bx bx-trash me-1"></i>  Delete</a>
+                {% endif %}
+            </td>
+            
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="{% if status == 'cleared' %}4{% else %}3{% endif %}">No debts found.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    
+
+  {% if debts.has_other_pages %}
+    <nav aria-label="Debt List Pagination">
+      <ul class="pagination justify-content-center">
+        {% if debts.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ debts.previous_page_number }}{% if status %}&status={{ status }}{% endif %}" tabindex="-1">Previous</a>
+          </li>
+        {% else %}
+          <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+          </li>
+        {% endif %}
+
+        {% for page in debts.paginator.page_range %}
+          {% if debts.number == page %}
+          <li class="page-item active" aria-current="page">
+          <a class="page-link" href="#">{{ page }}<span class="sr-only">(current)</span></a>
+          </li>
+          {% else %}
+          <li class="page-item"><a class="page-link" href="?page={{ page }}{% if status %}&status={{ status }}{% endif %}">{{ page }}</a></li>
+          {% endif %}
+          {% endfor %}
+          {% if debts.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ debts.next_page_number }}{% if status %}&status={{ status }}{% endif %}">Next</a>
+          </li>
+        {% else %}
+          <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Next</a>
+          </li>
+        {% endif %}
+      </ul>
+    </nav>
+    {% endif %}
+  </div>
+</div>
+  </div>
+</div>
+{% endblock %}

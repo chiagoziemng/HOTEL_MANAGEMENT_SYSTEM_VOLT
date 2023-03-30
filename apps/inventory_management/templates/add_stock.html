@@ -1,0 +1,40 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+
+          <!-- Content wrapper -->
+          <div class="content-wrapper">
+            <!-- Content -->
+            <div class="card mb-4">
+            <div class="container-xxl flex-grow-1 container-p-y">
+              <h3 class="card-header"><span class="text-muted fw-light">Stock /</span> Add Stock</h3>
+              <!-- Bootstrap Toasts with Placement -->                     
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row gx-3 gy-2 align-items-center">
+                            <div class="col-md-3">
+                              <label  class="form-label" for="drink">Drink:</label>
+                              <i class='bx bx-chevron-down'></i>{{ form.drink }} 
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label" for="quantity">Quantity:</label>
+                                {{ form.quantity }}
+                            </div>
+                            <div class="col-md-3">
+                                <label  class="form-label" for="drink"></label>                           
+                              <button type="submit"  class="btn btn-primary d-block">Add Stock</button>
+                            </div>
+                          </div>
+                      </form>
+                </div>
+              </div>
+              <!--/ Bootstrap Toasts with Placement -->
+
+            
+            </div>
+          </div>
+            <!-- / Content -->
+
+           
+{% endblock %}
